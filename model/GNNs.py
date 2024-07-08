@@ -370,7 +370,7 @@ class KANLinear(torch.nn.Module):
         )
 
 class kanGCNNet(torch.nn.Module):
-    def __init__(self, graph):
+    def __init__(self, graph,num_labels):
         super().__init__()
         self.conv1 = kanChebConv(graph.num_features, 512, K=1)
         self.conv2 = kanChebConv(512, 256, K=2)
@@ -378,7 +378,8 @@ class kanGCNNet(torch.nn.Module):
         self.ln1 = nn.LayerNorm(512)
         self.ln2 = nn.LayerNorm(256)
         self.ln3 = nn.LayerNorm(128)
-        self.fc = KANLinear(128, 6)
+        self.fc = KANLinear(128, num_labels)
+        print("Right now the num of labels is: ", num_labels)
 
     def forward(self,graph):
         x, edge_index, edge_weight = graph.x, graph.edge_index, graph.edge_attr  # the Forward path of model
